@@ -45,6 +45,8 @@ function addQuote() {
   quotes.push({ text, category });
   saveQuotes();
   populateCategories();
+  displayRandomQuote(); // ✅ Update DOM immediately
+
   textInput.value = "";
   categoryInput.value = "";
 
@@ -120,6 +122,7 @@ function importFromJsonFile(event) {
       quotes.push(...importedQuotes);
       saveQuotes();
       populateCategories();
+      displayRandomQuote(); // ✅ show imported quote immediately
       alert("Quotes imported successfully!");
     } catch {
       alert("Invalid JSON file.");
@@ -164,7 +167,8 @@ document.addEventListener("DOMContentLoaded", () => {
   populateCategories();
   displayRandomQuote();
 
-  const newQuoteBtn = document.getElementById("newQuote");
+  // ✅ Fix: Correct button id
+  const newQuoteBtn = document.getElementById("showNewQuote");
   if (newQuoteBtn) {
     newQuoteBtn.addEventListener("click", displayRandomQuote);
   }
