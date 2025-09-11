@@ -14,8 +14,8 @@ function saveQuotes() {
   localStorage.setItem("quotes", JSON.stringify(quotes));
 }
 
-// ---------------- Display ----------------
-function displayRandomQuote() {
+// ---------------- Show Random Quote ----------------
+function showRandomQuote() {
   const display = document.getElementById("quoteDisplay");
   if (quotes.length === 0) {
     display.textContent = "No quotes available.";
@@ -35,7 +35,7 @@ function addQuote() {
   quotes.push({ text, category });
   saveQuotes();
   populateCategories();
-  displayRandomQuote();   // ✅ immediately update DOM
+  showRandomQuote();   // ✅ update DOM immediately
 
   document.getElementById("newQuoteText").value = "";
   document.getElementById("newQuoteCategory").value = "";
@@ -101,7 +101,7 @@ function importFromJsonFile(event) {
       quotes.push(...imported);
       saveQuotes();
       populateCategories();
-      displayRandomQuote();
+      showRandomQuote();
     } catch {
       alert("Invalid JSON file.");
     }
@@ -138,11 +138,11 @@ function syncQuotes() {
 document.addEventListener("DOMContentLoaded", () => {
   loadQuotes();
   populateCategories();
-  displayRandomQuote();
+  showRandomQuote();
 
-  // ✅ Checker expects this
-  const btn = document.getElementById("showNewQuote");
-  if (btn) btn.addEventListener("click", displayRandomQuote);
+  // ✅ Must be id="newQuote" not "showNewQuote"
+  const btn = document.getElementById("newQuote");
+  if (btn) btn.addEventListener("click", showRandomQuote);
 
   setInterval(syncQuotes, 30000);
 });
