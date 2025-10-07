@@ -1,4 +1,4 @@
-// ---------------- Quotes ----------------
+// ---------------- Quotes ---------------- 
 let quotes = [
   { text: "The best way to get started is to quit talking and begin doing.", category: "Motivation" },
   { text: "Success is not the key to happiness. Happiness is the key to success.", category: "Inspiration" },
@@ -39,6 +39,23 @@ function addQuote() {
 
   document.getElementById("newQuoteText").value = "";
   document.getElementById("newQuoteCategory").value = "";
+}
+
+// ---------------- ✅ Create Add Quote Form ----------------
+function createAddQuoteForm(containerId) {
+  const container = document.getElementById(containerId);
+  if (!container) return;
+
+  const form = document.createElement("form");
+  form.innerHTML = `
+    <input type="text" id="newQuoteText" placeholder="Enter quote" required />
+    <input type="text" id="newQuoteCategory" placeholder="Enter category" required />
+    <button type="button" id="addQuoteBtn">Add Quote</button>
+  `;
+
+  container.appendChild(form);
+
+  document.getElementById("addQuoteBtn").addEventListener("click", addQuote);
 }
 
 // ---------------- Categories ----------------
@@ -144,5 +161,9 @@ document.addEventListener("DOMContentLoaded", () => {
   const btn = document.getElementById("newQuote");
   if (btn) btn.addEventListener("click", showRandomQuote);
 
+  // ✅ Initialize Add Quote Form dynamically
+  createAddQuoteForm("addQuoteContainer");
+
   setInterval(syncQuotes, 30000);
 });
+
