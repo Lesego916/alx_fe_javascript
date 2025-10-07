@@ -48,13 +48,12 @@ function createAddQuoteForm(containerId) {
 
   const form = document.createElement("form");
   form.innerHTML = `
-    <input type="text" id="newQuoteText" placeholder="Enter quote" required />
-    <input type="text" id="newQuoteCategory" placeholder="Enter category" required />
-    <button type="button" id="addQuoteBtn">Add Quote</button>
+    <input type="text" id="newQuoteText" placeholder="Enter quote" required class="border p-2 rounded w-full mb-2" />
+    <input type="text" id="newQuoteCategory" placeholder="Enter category" required class="border p-2 rounded w-full mb-2" />
+    <button type="button" id="addQuoteBtn" class="bg-blue-500 text-white px-4 py-2 rounded">Add Quote</button>
   `;
 
   container.appendChild(form);
-
   document.getElementById("addQuoteBtn").addEventListener("click", addQuote);
 }
 
@@ -126,29 +125,40 @@ function importFromJsonFile(event) {
   reader.readAsText(event.target.files[0]);
 }
 
-// ---------------- Server Sync ----------------
-function fetchQuotesFromServer() {
-  return fetch("https://jsonplaceholder.typicode.com/posts")
-    .then(r => r.json())
-    .then(data => {
-      console.log("Fetched:", data.slice(0, 3));
-      return data;
+// ---------------- ✅ Async / Await Server Sync ----------------
+async function fetchQuotesFromServer() {
+  try {
+    const res = await fetch("https://jsonplaceholder.typicode.com/posts");
+    const data = await res.json();
+    console.log("Fetched:", data.slice(0, 3));
+    return data;
+  } catch (err) {
+    console.error("Error fetching:", err);
+    return [];
+  }
+}
+
+async function postQuoteToServer(quote) {
+  try {
+    const res = await fetch("https://jsonplaceholder.typicode.com/posts", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(quote)
     });
+    const data = await res.json();
+    console.log("Posted:", data);
+    return data;
+  } catch (err) {
+    console.error("Error posting:", err);
+  }
 }
 
-function postQuoteToServer(quote) {
-  return fetch("https://jsonplaceholder.typicode.com/posts", {
-    body: JSON.stringify(quote)
-  }).then(r => r.json()).then(d => console.log("Posted:", d));
-}
-
-function syncQuotes() {
-  fetchQuotesFromServer().then(serverData => {
-    if (serverData && serverData.length > 0) {
-      localStorage.setItem("quotes", JSON.stringify(quotes));
-      console.log("Synced with server");
-    }
-  });
+async function syncQuotes() {
+  const serverData = await fetchQuotesFromServer();
+  if (serverData && serverData.length > 0) {
+    localStorage.setItem("quotes", JSON.stringify(quotes));
+    console.log("✅ Synced with server using async/await");
+  }
 }
 
 // ---------------- Init ----------------
@@ -166,4 +176,5 @@ document.addEventListener("DOMContentLoaded", () => {
 
   setInterval(syncQuotes, 30000);
 });
+
 
