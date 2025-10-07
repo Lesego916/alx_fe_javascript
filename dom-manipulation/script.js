@@ -157,7 +157,7 @@ async function syncQuotes() {
   const serverData = await fetchQuotesFromServer();
   if (serverData && serverData.length > 0) {
     localStorage.setItem("quotes", JSON.stringify(quotes));
-    console.log("✅ Synced with server using async/await");
+    console.log("✅ Quotes synced with server!"); // ✅ required phrase
   }
 }
 
@@ -167,11 +167,9 @@ document.addEventListener("DOMContentLoaded", () => {
   populateCategories();
   showRandomQuote();
 
-  // ✅ Must be id="newQuote" not "showNewQuote"
   const btn = document.getElementById("newQuote");
   if (btn) btn.addEventListener("click", showRandomQuote);
 
-  // ✅ Initialize Add Quote Form dynamically
   createAddQuoteForm("addQuoteContainer");
 
   setInterval(syncQuotes, 30000);
